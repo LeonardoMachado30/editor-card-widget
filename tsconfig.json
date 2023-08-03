@@ -20,7 +20,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@*": ["./src/*"],
+      "@icons*": ["./public/icons/*"],
+      "@utils": ["./src/utils/*.ts"],
+      "@controller": ["./src/controller/*.ts"],
+      "@models": ["./src/models/exportModels.ts"],
+      "@components": ["./src/components/exportComponents.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
