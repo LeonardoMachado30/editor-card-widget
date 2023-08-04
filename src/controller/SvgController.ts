@@ -1,58 +1,99 @@
 import { IProps, svgDefaultValue } from "@models";
+import { svgDefaultProps } from "@models/IParamsSvg";
 
-// interface ISet {
-//   prop: IProps;
-//   param: string;
-// }
+interface IText {
+  text: string | null;
+  textLenght: number;
+  newSizeFont: string;
+}
+
+interface IConvertUrl {
+  uri: IProps | string[];
+}
 
 export default class SvgController {
-  private props: IProps = svgDefaultValue;
+  constructor(private state = svgDefaultValue) {}
 
-  // private _calcShapeWidth(value: string) {
-  //   return value.length * (value.length < 8 ? 2 : 8) + this.props._shape.width;
-  // }
+  handleResizeShapeFromText(): IText | null {
+    /* TODO: Criar a regra de quando o dimensionamento e:
+      sm e 24 e > 8 caracteres = diminui a fonte
+      sm e 24 e > 8 caracteres = diminui a fonte
+    */
 
-  // get(prop: string[]) {
-  //   let _: ISet;
-  //   for (const value of prop) {
-  //     _ = this.set(value);
-  //   }
-  //   // return _;
-  // }
+    const sizeFont = this.state?.font?.size;
+    const sizeShape = this.state?.shape?.size;
+    const textLenght = this.state?.text?.length as number;
+    let newSizeFont = this.state?.font?.size;
 
-  // replaceURL(param: string) {
-  //   return param.replace(/.+%3D/g, "");
-  // }
+    // if (this.state?.font?.size === 24) return null;
 
-  // set(param: string): ISet {
-  //   const paramReplace = this.replaceURL(param);
-  //   const _ = this.props;
+    const text =
+      typeof this.state?.text !== "undefined" ? this.state?.text : null;
 
-  //   if (param.includes("bg")) {
-  //     this.bg(paramReplace);
-  //   } else if (param.includes("text")) {
-  //     _.text = paramReplace.toLocaleUpperCase();
-  //     _.font._x = (paramReplace.length * 10) / 2 + _.font._x;
-  //     _._shape.width = this._calcShapeWidth(paramReplace);
-  //   } else if (param.includes("fontsize")) {
-  //     if (parseInt(paramReplace) >= 100 && parseInt(paramReplace) <= 150)
-  //       _.font.size = parseInt(paramReplace);
-  //   }
-  //   return { prop: _, param };
-  // }
+    return { text, textLenght, newSizeFont };
+  }
 
-  // bg(value?: string) {
-  //   if (value === "fff") {
-  //     this.props.font.color = "000";
-  //   } else if (value === "000") {
-  //     this.props.font.color = "fff";
-  //   }
-  // }
+  handleFontResizeFromImgHidden(): boolean | string | undefined {
+    const sizeFont = this.state?.font?.size.toString();
+    const sizeShape = this.state?.shape?.size;
+    if (sizeShape === "sm")
+      return sizeFont === "24" ? true : sizeFont === "20" && true;
+  }
+
+  setResizeFontSize() {
+    const sizeFont = this.state?.font?.size;
+    switch (sizeFont) {
+      case "16":
+        return sizeFont;
+      case "20":
+        return sizeFont;
+      case "24":
+        return sizeFont;
+      default:
+        return sizeFont;
+    }
+  }
+
+  setResizeShapeSize(): Array<number> {
+    const sizeShape = this.state?.shape.size;
+    const sizeFont = this.state?.font?.size;
+    const textLenght = this.state?.text?.length as number;
+    const hiddenImg = this.state.img.hidden;
+    const widthDefult = 150;
+    const calcWidth = textLenght * 10 + widthDefult;
+    const calcWidthWithoutImg = textLenght * 8 + widthDefult;
+    return svgDefaultProps.shapeSize.map((value) => {
+      if (sizeFont === "24") {
+        textLenght >= 8 ? [calcWidth, 30] : [widthDefult, 30];
+      }
+
+      if (sizeShape === "lg") {
+        return [250, 70];
+      } else if (sizeShape === "md") {
+        return [200, 50];
+      } else {
+        return [150, 30];
+      }
+    })[0];
+  }
+
+  convertUrlInObject(uri = svgDefaultValue) {
+    // for (const i in uri) {
+    //   console.log(uri);
+    // }
+
+    return uri;
+  }
 
   url(_props?: IProps): string {
-    const value = _props || this.props;
+    const value = _props || this.state;
     const text =
-      value.text !== "" ? `/text=${value.text.replace(" ", "%20")}` : "";
-    return `${text}/bg=${value?.bg}/fontsize=${value.font.size}/fontcolor=${value.font.color}`;
+      value?.text !== "" ? `text=${value?.text.replace(/\s/g, "%20")}` : "";
+    const shapeSize = `shapesize=${value?.shape.size}`;
+    const bg = `bg=${value?.bg}`;
+    const fontsize = `fontsize=${value?.font.size}`;
+    const fontcolor = `fontcolor=${value?.font.color}`;
+
+    return `/${text}/${bg}/${fontsize}/${fontcolor}/${shapeSize}`;
   }
 }
