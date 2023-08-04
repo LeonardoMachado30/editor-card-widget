@@ -1,50 +1,92 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { MouseEventHandler, useContext, useState } from "react";
 import { SvgContext } from "@utils/Context";
 import { SvgComponent } from "@components";
 import TextField from "@mui/material/TextField";
-import { IProps } from "@models";
 import SvgController from "@controller/SvgController";
-import Slider from "@mui/material/Slider";
 import CopyAllOutlinedIcon from "@mui/icons-material/CopyAllOutlined";
 import BackspaceIcon from "@mui/icons-material/Backspace";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Switch from "@mui/material/Switch";
+import { FormControlLabel } from "@mui/material";
+import { svgDefaultProps } from "@models/IParamsSvg";
 
 export default function Form(): JSX.Element {
+  const [imgHidden, setImgHidden] = useState<boolean>(false); // Declare a state variable...
   const svgController = new SvgController();
   const { ...context } = useContext(SvgContext);
   const { state, setState } = context;
 
-  const handleSlider = (e: Event) => {
-    {
-      let calc;
-
-      if (
-        state.font.size >= 12 &&
-        state.font.size <= 21 &&
-        state._shape?.width >= 132
-      ) {
-        calc = state._shape?.width - 4;
-      } else if (
-        state.font.size >= 21 &&
-        state.font.size <= 30 
-        // && state._shape?.width <= 300
-      ) {
-        calc = state._shape?.width + 4;
-      }else{
-        calc = state._shape?.width;
-      }
-
-      setState({
-        ...state,
-        font: { ...state.font, size: e?.target?.value },
-        _shape: {
-          width: calc,
-          height: state._shape?.height,
-        },
-      });
-    }
+  const handleShapeSize = (e: any) => {
+    setState({ ...state, shape: { size: e.target.value } });
   };
+
+  const handleFontSize = (e: any) => {
+    const value = e.target.value;
+
+    const svgState = {
+      ...state,
+      font: { ...state.font, size: value },
+    };
+
+    setState(svgState);
+  };
+
+  const handleImgHidden = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target?.checked;
+    const svgState = {
+      ...state,
+      img: { hidden: value },
+    };
+    console.log(value);
+
+    setState(svgState);
+    return;
+  };
+
+  const handleDisabledShapeLess = (value: string) => {
+    if ((value === "md" || value === "sm") && state.font.size === "24")
+      return true;
+
+    return false;
+  };
+
+  const handleClassNameButtonsHover = (_state: any, value: string): string => {
+    return `${
+      _state === value
+        ? "bg-violet-800 text-white hover:bg-violet-800 hover:text-white"
+        : ""
+    }`;
+  };
+
+  const buttonsShape = svgDefaultProps.shapeSize.map((size) => {
+    return (
+      <Button
+        key={size}
+        onClick={handleShapeSize}
+        value={size}
+        className={handleClassNameButtonsHover(state.shape.size, size)}
+        disabled={handleDisabledShapeLess(size)}
+      >
+        {size}
+      </Button>
+    );
+  });
+
+  const buttonsFont = svgDefaultProps.fontSize.map((size) => {
+    return (
+      <Button
+        key={size}
+        onClick={handleFontSize}
+        value={size}
+        className={handleClassNameButtonsHover(state.font.size, size)}
+      >
+        {size}
+      </Button>
+    );
+  });
 
   return (
     <div className="flex gap-2 flex-wrap items-center justify-center">
@@ -57,59 +99,59 @@ export default function Form(): JSX.Element {
           {svgController.url(state)}
         </div>
 
-        <CopyAllOutlinedIcon
-          className="absolute top-4 right-4"
-          // onClick={() => handleCopy(svgController.url())}
-        />
+        <CopyAllOutlinedIcon className="absolute top-4 right-4" />
       </div>
 
       <div className="relative w-full">
         <TextField
+          inputProps={{ maxLength: 14 }}
           autoComplete="off"
           required
           className="w-full"
           id="outlined-required"
           label="Titulo"
-          value={state.text}
-          defaultValue=""
-          onChange={(e: any) =>
+          value={state?.text}
+          onChange={({ target }: any) =>
+            setState({ ...state, text: `${target.value}`.toLocaleUpperCase() })
+          }
+        />
+
+        <BackspaceIcon
+          className="absolute top-4 right-4 cursor-pointer fill-black hover:fill-violet-700 active:fill-violet-700 focus-within:fill-violet-700"
+          onClick={() =>
             setState({
               ...state,
-              text: `${e.target.value}`.toLocaleUpperCase(),
+              text: "",
             })
           }
         />
-        <div className="flex">
-          <h2>Fonte</h2>
-          <BackspaceIcon
-            className="absolute top-4 right-4 cursor-pointer fill-black hover:fill-violet-700 active:fill-violet-700 focus-within:fill-violet-700"
-            onClick={() =>
-              setState({
-                ...state,
-                text: "",
-              })
-            }
-          />
+      </div>
+
+      <div className="flex justify-between w-full">
+        <div className="flex flex-col ">
+          <h2>Corpo</h2>
+
+          <ButtonGroup variant="outlined" aria-label="outlined button group">
+            {buttonsShape}
+          </ButtonGroup>
         </div>
 
-        {/* <Slider
-          getAriaLabel={() => "Minimum distance shift"}
-          value={state.font.size}
-          onChange={handleSlider}
-          valueLabelDisplay="auto"
-          getAriaValueText={valuetext}
-          disableSwap
-        /> */}
-        <Slider
-          valueLabelDisplay="auto"
-          aria-label="Default"
-          defaultValue={16}
-          marks
-          min={12}
-          max={30}
-          onChange={handleSlider}
-        />
+        <div className="flex flex-col ">
+          <h2>Fonte</h2>
+
+          <ButtonGroup variant="outlined" aria-label="outlined button group">
+            {buttonsFont}
+          </ButtonGroup>
+        </div>
       </div>
+
+      <FormControlLabel
+        className="w-full"
+        control={
+          <Switch checked={state?.img?.hidden} onChange={handleImgHidden} />
+        }
+        label="Ocutar imagem"
+      />
     </div>
   );
 }
