@@ -1,5 +1,6 @@
+"use client"
 import { SvgComponent } from "@components";
-import SvgController from "@utils/SvgController";
+import SvgController from "@controller/SvgController";
 
 export default function Home({
   params,
@@ -8,7 +9,7 @@ export default function Home({
 }): JSX.Element {
   const { props } = params;
   const svgController = new SvgController();
-  const getPropSvg = svgController.get(props);
+  const getPropSvg = svgController.convertUrlInObject();
 
-  return <SvgComponent props={getPropSvg} />;
+  return <SvgComponent state={getPropSvg} />;
 }
