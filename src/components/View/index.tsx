@@ -1,4 +1,3 @@
-import SvgComponent from "../SvgComponent";
 import Form from "./Form";
 import SvgProvider from "@utils/Context";
 
