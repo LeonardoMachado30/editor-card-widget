@@ -1,34 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Widget de Cartão de Habilidades
 
-## Getting Started
+Este projeto é um widget interativo desenvolvido com Next.js que permite criar e exportar cartões personalizados descrevendo habilidades técnicas. O widget oferece uma interface amigável para customização e exportação de imagens.
 
-First, run the development server:
+## 🚀 Tecnologias Utilizadas
+
+- [Next.js](https://nextjs.org/) - Framework React para desenvolvimento web
+- [React](https://reactjs.org/) - Biblioteca JavaScript para construção de interfaces
+- [TypeScript](https://www.typescriptlang.org/) - Superset JavaScript com tipagem estática
+- [Material-UI](https://mui.com/) - Biblioteca de componentes React
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS utilitário
+- [Emotion](https://emotion.sh/) - Biblioteca para estilização CSS-in-JS
+
+## 📋 Pré-requisitos
+
+- Node.js (versão 14 ou superior)
+- npm ou yarn
+
+## 🔧 Instalação
+
+1. Clone o repositório:
+
+```bash
+git clone [URL_DO_REPOSITÓRIO]
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+# ou
+yarn install
+```
+
+3. Execute o projeto em modo de desenvolvimento:
 
 ```bash
 npm run dev
-# or
+# ou
 yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O projeto estará disponível em `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Scripts Disponíveis
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Cria a versão de produção
+- `npm run start` - Inicia o servidor de produção
+- `npm run lint` - Executa a verificação de código
 
-## Learn More
+## 📦 Estrutura do Projeto
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  ├── app/          # Páginas e rotas da aplicação
+  ├── components/   # Componentes React reutilizáveis
+  ├── controller/   # Controladores da aplicação
+  ├── models/       # Definições de tipos e interfaces
+  └── utils/        # Funções utilitárias
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Funcionalidades
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Interface de customização de cartão de habilidades
+- Exportação do cartão como imagem
+- Personalização de cores e estilos
+- Layout responsivo
 
-## Deploy on Vercel
+## 🤝 Contribuindo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Faça um Fork do projeto
+2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
+3. Faça o Commit das suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Faça o Push para a Branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
